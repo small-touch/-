@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机点菜工具</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        #menu {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-y: auto;
+            max-height: 320px;
+            border: 1px dashed #ccc;
+            padding: 16px;
+            justify-content: center;
+        }
+        .menu-item {
+            background-color: #e9e9e9;
+            padding: 5px 16px;
+            border-radius: 16px;
+            cursor: pointer;
+        }
+        .menu-item.selected {
+            background-color: #4CAF50;
+            color: white;
+        }
+        #selectButton {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        #result {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 10px;
+            }
+            #menu {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>随机点菜工具</h1>
+        <div id="result">点击按钮开始选择</div>
+        <button id="selectButton">随机选择</button>
+        <div id="menu"></div>
+    </div>
+
+    <script>
+        const dishes = [
+            "内江鲜烧牛肉", "火锅", "内江牛肉面", "兔子面", "奶茶", "鲜锅兔", "资中鲶鱼", "毛血旺", "串串", "无骨鸡爪", "大千千烧鱼", "宫保鸡丁", "麻婆豆腐", "鱼香肉丝", "糖醋里脊", "红烧肉",
+            "水煮鱼", "辣子鸡", "回锅肉", "东坡肉", "酸菜鱼", "土豆肉丝", "酸辣土豆丝", "梅菜扣肉", "土豆炖牛腩", "袁记云饺", "曹氏",
+            "葱爆羊肉", "蒜蓉虾", "青椒肉丝", "西红柿炒蛋", "红烧排骨", "烧烤", "肯德基", "塔斯汀汉堡", "柴火鸡",
+        ];
+
+        const menuElement = document.getElementById('menu');
+        const selectButton = document.getElementById('selectButton');
+        const resultElement = document.getElementById('result');
+
+        // 生成菜单
+        dishes.forEach(dish => {
+            const dishElement = document.createElement('div');
+            dishElement.className = 'menu-item';
+            dishElement.textContent = dish;
+            dishElement.addEventListener('click', () => {
+                dishElement.classList.toggle('selected');
+            });
+            menuElement.appendChild(dishElement);
+        });
+
+        // 随机选择功能
+        selectButton.addEventListener('click', () => {
+            resultElement.style.opacity = 0;
+            const selectedDishes = Array.from(document.querySelectorAll('.menu-item.selected'))
+                .map(item => item.textContent);
+            
+            const dishesToChooseFrom = selectedDishes.length > 0 ? selectedDishes : dishes;
+            const randomDish = dishesToChooseFrom[Math.floor(Math.random() * dishesToChooseFrom.length)];
+            setTimeout(() => {
+                resultElement.textContent = `今天吃：${randomDish}`;
+                resultElement.style.animation = 'fadeIn 0.5s ease-out';
+                resultElement.style.opacity = 1;
+            }, 200);
+        });
+    </script>
+</body>
+</html>
